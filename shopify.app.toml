@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "ashley-inventory"
+client_id = "75d3563b29c92e5e9ba2e0dbaae066b8"
+application_url = "https://danish-centres-civic-nations.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://danish-centres-civic-nations.trycloudflare.com/auth/callback",
+  "https://danish-centres-civic-nations.trycloudflare.com/auth/shopify/callback",
+  "https://danish-centres-civic-nations.trycloudflare.com/api/auth/callback",
+  "https://danish-centres-civic-nations.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "issaworkshop.myshopify.com"
