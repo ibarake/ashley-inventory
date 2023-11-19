@@ -22,8 +22,10 @@ export default function App() {
   return (
     <div className="index">
       <div className="content">
-        <h1>A short heading about [your app]</h1>
-        <p>A tagline about [your app] that describes your value proposition.</p>
+        <h1>[your app]</h1>
+        <p>
+          Carga de inventario, fecha de entrega y estado para Ashley Colombia.
+        </p>
         {showForm && (
           <Form method="post" action="/auth/login">
             <label>
@@ -36,16 +38,20 @@ export default function App() {
         )}
         <ul>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Carga inventario</strong>. el inventario se actualizara sin
+            importar los datos actuales en shopify (sobreescrito).
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Archivo CSV solamente</strong>. Usar archivo descargado de
+            drive.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Carga de fecha disponible</strong>. La fecha disponible sera
+            actualizada sin importar los datos actuales (sobreescrita).
+          </li>
+          <li>
+            <strong>Carga de estado</strong>. El estado de los productos
+            afectara la visibilidad de productos en la tienda.
           </li>
         </ul>
       </div>

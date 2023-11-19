@@ -2,7 +2,7 @@
 
 name = "ashley-inventory"
 client_id = "75d3563b29c92e5e9ba2e0dbaae066b8"
-application_url = "https://danish-centres-civic-nations.trycloudflare.com"
+application_url = "https://consensus-estimated-startup-terrorism.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://danish-centres-civic-nations.trycloudflare.com/auth/callback",
-  "https://danish-centres-civic-nations.trycloudflare.com/auth/shopify/callback",
-  "https://danish-centres-civic-nations.trycloudflare.com/api/auth/callback",
-  "https://danish-centres-civic-nations.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://consensus-estimated-startup-terrorism.trycloudflare.com/auth/callback",
+  "https://consensus-estimated-startup-terrorism.trycloudflare.com/auth/shopify/callback",
+  "https://consensus-estimated-startup-terrorism.trycloudflare.com/api/auth/callback",
+  "https://consensus-estimated-startup-terrorism.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
