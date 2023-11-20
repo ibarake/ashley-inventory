@@ -20,3 +20,20 @@ model Session {
   accessToken String
   userId      BigInt?
 }
+
+model UploadData {
+  id      Int       @id @default(autoincrement())
+  invData InvData[]
+}
+
+model InvData {
+  sku             String      @id
+  title           String
+  handle          String
+  location        String
+  disponible      Int
+  enMano          Int
+  fechaDisponible String
+  UploadData      UploadData? @relation(fields: [uploadDataId], references: [id])
+  uploadDataId    Int?
+}
