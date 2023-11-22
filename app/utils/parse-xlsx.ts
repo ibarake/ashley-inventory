@@ -29,7 +29,17 @@ export async function parseXLSXFromFile(filePath: string) {
     });
 
     fs.rm(filePath, () => {
-      return resolve(sheets[0].data as { name: string; age: number }[]);
+      return resolve(
+        sheets[0].data as {
+          SKU: string;
+          Title: string;
+          Handle: string;
+          Location: string;
+          Available: number; // Assuming it's a number
+          On_hand: number; // Assuming it's a number
+          fecha_Disponible: string;
+        }[]
+      );
     });
   });
 }

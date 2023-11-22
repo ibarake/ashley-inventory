@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import type { ActionFunction } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -10,19 +9,12 @@ import {
   isUploadedFile,
   uploadHandler,
 } from "~/utils/upload-handler";
-import {
-  Form,
-  useFetcher,
-  useLoaderData,
-  useNavigation,
-  useSubmit,
-} from "@remix-run/react";
+import { Form, useLoaderData, useSubmit } from "@remix-run/react";
 import {
   Page,
   Layout,
   Text,
   Card,
-  Button,
   BlockStack,
   InlineStack,
   DataTable,
@@ -31,28 +23,23 @@ import {
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
+import { InvData, PrismaPromise } from "@prisma/client";
+
+interface DataRow {
+  SKU: string;
+  Title: string;
+  Handle: string;
+  Location: string;
+  Available: number; // Assuming it's a number
+  On_hand: number; // Assuming it's a number
+  Fecha_Disponible: string;
+  // Add other fields as necessary
+}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
 
-  const find = db.uploadData.findMany({
-    // Returns all inventory fields
-    include: {
-      invData: {
-        select: {
-          sku: true,
-          title: true,
-          handle: true,
-          location: true,
-          disponible: true,
-          enMano: true,
-          fechaDisponible: true,
-          UploadData: true,
-          uploadDataId: true,
-        },
-      },
-    },
-  });
+  const find: PrismaPromise<InvData[]> = db.invData.findMany();
 
   return find;
 };
@@ -67,19 +54,71 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (!isUploadedFile(file)) return null;
 
+  let rawData: unknown;
   if (file.type === allowedMimeTypes.xlsx) {
-    const rawData = await parseCSVFromFile(file.filepath);
-    console.log(rawData);
-
-    return rawData;
+    rawData = await parseXLSXFromFile(file.filepath);
   } else {
-    const data = await parseCSVFromFile(file.filepath);
-    return json(data);
+    rawData = await parseCSVFromFile(file.filepath);
   }
+
+  // Assert that rawData is an array of DataRow objects
+  if (
+    !Array.isArray(rawData) ||
+    !rawData.every((row) => typeof row === "object")
+  ) {
+    throw new Error("Invalid data format");
+  }
+  const typedData = rawData as DataRow[];
+
+  const safeNumberConversion = (value: String | Number) => {
+    const number = Number(value);
+    return isNaN(number) ? 0 : number;
+  };
+
+  const batchSize = 50;
+  for (let i = 0; i < typedData.length; i += batchSize) {
+    const batch = typedData.slice(i, i + batchSize);
+    const createInvDataPromises = batch.map(async (dataRow) => {
+      const existingRecord = await db.invData.findUnique({
+        where: { sku: dataRow.SKU.toString() },
+      });
+      if (!existingRecord) {
+        return db.invData.create({
+          data: {
+            sku: dataRow.SKU.toString(),
+            title: dataRow.Title,
+            handle: dataRow.Handle,
+            location: dataRow.Location,
+            disponible: safeNumberConversion(dataRow.Available),
+            enMano: safeNumberConversion(dataRow.On_hand),
+            fechaDisponible: dataRow.Fecha_Disponible,
+          },
+        });
+      } else {
+        console.log(`Record with SKU ${dataRow.SKU} already exists. Updating.`);
+        return db.invData.updateMany({
+          where: { sku: dataRow.SKU.toString() },
+          data: {
+            title: dataRow.Title,
+            handle: dataRow.Handle,
+            location: dataRow.Location,
+            disponible: safeNumberConversion(dataRow.Available),
+            enMano: safeNumberConversion(dataRow.On_hand),
+            fechaDisponible: dataRow.Fecha_Disponible,
+          },
+        });
+      }
+    });
+
+    // Wait for the current batch of create operations to complete
+    await Promise.all(createInvDataPromises);
+  }
+  return json(typedData);
 };
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
+
   const fileUploader = useSubmit();
 
   const columnTypes: ColumnContentType[] = [
@@ -93,21 +132,21 @@ export default function Index() {
   ];
   const headers = [
     "sku",
-    "title",
     "handle",
-    "location",
+    "title",
+    "fechaDisponible",
     "disponible",
     "enMano",
-    "fechaDisponible",
+    "location",
   ];
-  const rows = data[0].invData.map((element) => [
+  const rows = data.map((element) => [
     element.sku,
-    element.title,
     element.handle,
-    element.location,
+    element.title,
+    element.fechaDisponible,
     element.disponible,
     element.enMano,
-    element.fechaDisponible,
+    element.location,
     // Add new data fields here
   ]);
 

@@ -2,7 +2,7 @@
 
 name = "ashley-inventory"
 client_id = "75d3563b29c92e5e9ba2e0dbaae066b8"
-application_url = "https://catherine-senegal-analysts-requesting.trycloudflare.com"
+application_url = "https://effects-intended-alloy-recruitment.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://catherine-senegal-analysts-requesting.trycloudflare.com/auth/callback",
-  "https://catherine-senegal-analysts-requesting.trycloudflare.com/auth/shopify/callback",
-  "https://catherine-senegal-analysts-requesting.trycloudflare.com/api/auth/callback",
-  "https://catherine-senegal-analysts-requesting.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://effects-intended-alloy-recruitment.trycloudflare.com/auth/callback",
+  "https://effects-intended-alloy-recruitment.trycloudflare.com/auth/shopify/callback",
+  "https://effects-intended-alloy-recruitment.trycloudflare.com/api/auth/callback",
+  "https://effects-intended-alloy-recruitment.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
