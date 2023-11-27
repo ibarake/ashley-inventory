@@ -25,7 +25,9 @@ model InvData {
   sku             String  @id
   title           String
   handle          String
-  location        String
+  enCamino        Int
+  noDisponible    Int
+  comprometido    Int
   disponible      Int
   enMano          Int
   fechaDisponible String?
