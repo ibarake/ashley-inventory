@@ -9,14 +9,21 @@ import { getProductVariant } from "~/utils/get-product-variant";
 export const action: ActionFunction = async ({ request }) => {
   try {
     const { admin } = await authenticate.admin(request);
-    const invdata: InvData[] = await db.invData.findMany();
 
     let count = 0;
     const BATCH_SIZE = 5; // Adjust batch size as needed
-    for (let i = 0; i < invdata.length; i += BATCH_SIZE) {
-      const batch = invdata.slice(i, i + BATCH_SIZE);
+    let page = 0;
+
+    while (true) {
+      const invdata: InvData[] = await db.invData.findMany({
+        skip: page * BATCH_SIZE,
+        take: BATCH_SIZE,
+      });
+
+      if (invdata.length === 0) break;
+
       await Promise.all(
-        batch.map((data) => {
+        invdata.map((data) => {
           if (data.handle && data.sku) {
             count++;
             console.log(`Processing ${count}`);
@@ -28,6 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
           }
         })
       );
+      page++;
     }
 
     console.log("completed");
