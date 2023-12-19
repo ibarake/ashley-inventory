@@ -2,19 +2,19 @@
 
 name = "ashley-inventory"
 client_id = "75d3563b29c92e5e9ba2e0dbaae066b8"
-application_url = "https://allergy-php-unexpected-disturbed.trycloudflare.com"
+application_url = "https://rock-client-reporters-lady.trycloudflare.com"
 embedded = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "write_products, read_inventory, write_inventory"
 
 [auth]
 redirect_urls = [
-  "https://allergy-php-unexpected-disturbed.trycloudflare.com/auth/callback",
-  "https://allergy-php-unexpected-disturbed.trycloudflare.com/auth/shopify/callback",
-  "https://allergy-php-unexpected-disturbed.trycloudflare.com/api/auth/callback",
-  "https://allergy-php-unexpected-disturbed.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://rock-client-reporters-lady.trycloudflare.com/auth/callback",
+  "https://rock-client-reporters-lady.trycloudflare.com/auth/shopify/callback",
+  "https://rock-client-reporters-lady.trycloudflare.com/api/auth/callback",
+  "https://rock-client-reporters-lady.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]

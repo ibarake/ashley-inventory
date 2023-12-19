@@ -13,11 +13,8 @@ interface DataRow {
   Handle: string;
   Title: string;
   SKU: string;
-  Incoming: Number;
-  Unavailable: Number;
-  Committed: Number;
   Available: Number;
-  On_hand: Number;
+  Status: string;
   Fecha_Disponible: string;
 }
 
@@ -68,11 +65,8 @@ export const action: ActionFunction = async ({ request }) => {
             sku: dataRow.SKU.toString(),
             title: dataRow.Title,
             handle: dataRow.Handle,
-            enCamino: safeNumberConversion(dataRow.Incoming),
-            noDisponible: safeNumberConversion(dataRow.Unavailable),
-            comprometido: safeNumberConversion(dataRow.Committed),
             disponible: safeNumberConversion(dataRow.Available),
-            enMano: safeNumberConversion(dataRow.On_hand),
+            estado: dataRow.Status,
             fechaDisponible: dataRow.Fecha_Disponible,
           },
         });
@@ -84,9 +78,7 @@ export const action: ActionFunction = async ({ request }) => {
             title: dataRow.Title,
             handle: dataRow.Handle,
             disponible: safeNumberConversion(dataRow.Available),
-            noDisponible: safeNumberConversion(dataRow.Unavailable),
-            comprometido: safeNumberConversion(dataRow.Committed),
-            enMano: safeNumberConversion(dataRow.On_hand),
+            estado: dataRow.Status,
             fechaDisponible: dataRow.Fecha_Disponible,
           },
         });

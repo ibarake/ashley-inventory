@@ -1,5 +1,10 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData, useSubmit } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useSearchParams,
+  useSubmit,
+} from "@remix-run/react";
 import {
   Page,
   Layout,
@@ -28,6 +33,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
   const data = useLoaderData<typeof loader>();
 
+  const [searchParams] = useSearchParams();
+  const requestId = searchParams.get("requestId");
+
   const convertToFormData = (data: any) => {
     const formData = new FormData();
     for (const key in data) {
@@ -54,22 +62,16 @@ export default function Index() {
     "handle",
     "title",
     "fechaDisponible",
-    "enCamino",
-    "noDisponible",
-    "Comprometido",
     "disponible",
-    "enMano",
+    "estado",
   ];
   const rows = data.map((element) => [
     element.sku,
     element.handle,
     element.title,
     element.fechaDisponible,
-    element.enCamino,
-    element.noDisponible,
-    element.comprometido,
     element.disponible,
-    element.enMano,
+    element.estado,
     // Add new data fields here
   ]);
 
@@ -86,7 +88,6 @@ export default function Index() {
     fileUploader(loaderFormData, {
       action: "update",
       method: "post",
-      encType: "multipart/form-data",
       navigate: false,
     });
   };

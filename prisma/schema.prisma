@@ -25,10 +25,7 @@ model InvData {
   sku             String  @id
   title           String
   handle          String
-  enCamino        Int
-  noDisponible    Int
-  comprometido    Int
   disponible      Int
-  enMano          Int
+  estado          String
   fechaDisponible String?
 }

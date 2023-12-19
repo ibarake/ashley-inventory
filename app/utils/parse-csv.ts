@@ -7,11 +7,8 @@ export async function parseCSVFromFile(filePath: string) {
       Handle: string;
       Title: string;
       SKU: string;
-      Incoming: string;
-      Unavailable: string;
-      Committed: string;
       Available: string;
-      On_hand: string;
+      Status: string;
       Fecha_Disponible: string;
     }[] = [];
     const parser = fs.createReadStream(filePath).pipe(
@@ -28,12 +25,9 @@ export async function parseCSVFromFile(filePath: string) {
         Handle: record[0],
         Title: record[1],
         SKU: record[2],
-        Incoming: record[3],
-        Unavailable: record[4],
-        Committed: record[5],
-        Available: record[6],
-        On_hand: record[7],
-        Fecha_Disponible: record[8],
+        Available: record[3],
+        Status: record[4],
+        Fecha_Disponible: record[5],
       });
     }
 
