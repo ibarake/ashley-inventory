@@ -6,8 +6,8 @@ export async function parseCSVFromFile(filePath: string) {
     const records: {
       Handle: string;
       Title: string;
-      SKU: string;
-      Available: string;
+      SKU: string | Number;
+      Available: string | Number;
       Status: string;
       Fecha_Disponible: string;
     }[] = [];
@@ -24,7 +24,7 @@ export async function parseCSVFromFile(filePath: string) {
       records.push({
         Handle: record[0],
         Title: record[1],
-        SKU: record[2],
+        SKU: record[2].toString(),
         Available: record[3],
         Status: record[4],
         Fecha_Disponible: record[5],

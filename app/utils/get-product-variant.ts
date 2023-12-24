@@ -64,6 +64,7 @@ export const getProductVariant = async (
   };
 
   console.log(`updating variant ${variant.node.sku}`);
+
   await handleRateLimit(admin.graphql, [
     variantMetafieldUpdate,
     MutationVariables,

@@ -24,10 +24,6 @@ export const variantMetafieldUpdate = `
             id
             value
           }
-          userErrors {
-            field
-            message
-          }
         }
       }
         `;
@@ -35,14 +31,8 @@ export const variantMetafieldUpdate = `
 export const inventoryItemMutation = `
         mutation inventorySetOnHandQuantities($input: InventorySetOnHandQuantitiesInput!) {
           inventorySetOnHandQuantities(input: $input) {
-            userErrors {
-              field
-              message
-            }
             inventoryAdjustmentGroup {
-              createdAt
               reason
-              referenceDocumentUri
               changes {
                 name
                 delta

@@ -53,21 +53,8 @@ export const action: ActionFunction = async ({ request }) => {
   };
 
   const batchSize = 10;
-
   for (let i = 0; i < typedData.length; i += batchSize) {
     const batch = typedData.slice(i, i + batchSize);
-
-    await db.invData.createMany({
-      data: batch.map((dataRow) => ({
-        sku: dataRow.SKU,
-        title: dataRow.Title,
-        handle: dataRow.Handle,
-        disponible: Number(dataRow.Available),
-        estado: dataRow.Status,
-        fechaDisponible: dataRow.Fecha_Disponible,
-      })),
-    });
-
     const createInvDataPromises = batch.map(async (dataRow) => {
       const existingRecord = await db.invData.findUnique({
         where: { sku: dataRow.SKU.toString() },
