@@ -86,7 +86,6 @@ export default function Index() {
       navigate: false,
     });
     setIsSubmiting(false);
-    window.location.reload();
   };
 
   const submitUpdate = (loaderFormData: FormData) => {
