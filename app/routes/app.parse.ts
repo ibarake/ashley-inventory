@@ -88,5 +88,12 @@ export const action: ActionFunction = async ({ request }) => {
     // Wait for the current batch of create operations to complete
     await Promise.all(createInvDataPromises);
   }
-  return redirect("/app");
+
+  // Redirect to the home page
+  redirect("/app");
+
+  // Return a promise that resolves after the redirect is sent
+  return new Promise<void>((resolve) => {
+    setImmediate(resolve);
+  });
 };
