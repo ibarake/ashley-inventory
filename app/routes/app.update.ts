@@ -11,7 +11,7 @@ export const action: ActionFunction = async ({ request }) => {
     const { admin } = await authenticate.admin(request);
 
     let count = 0;
-    const BATCH_SIZE = 5; // Adjust batch size as needed
+    const BATCH_SIZE = 4; // Adjust batch size as needed
     let page = 0;
 
     while (true) {

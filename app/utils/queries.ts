@@ -2,7 +2,7 @@ export const GetVariantAndMetafield = `
     query GetVariantMetafield($handle: String!) {
       productByHandle(handle: $handle) {
         id
-        variants(first: 10) {
+        variants(first: 5) {
           edges {
             node {
               id
@@ -33,10 +33,6 @@ export const inventoryItemMutation = `
           inventorySetOnHandQuantities(input: $input) {
             inventoryAdjustmentGroup {
               reason
-              changes {
-                name
-                delta
-              }
             }
           }
         }
@@ -48,10 +44,6 @@ export const statusUpdate = `
           product {
             id
             status
-          }
-          userErrors {
-            field
-            message
           }
         }
       }`;
