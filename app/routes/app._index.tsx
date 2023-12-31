@@ -21,6 +21,7 @@ import {
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 import { InvData, PrismaPromise } from "@prisma/client";
+import { useState } from "react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
@@ -31,6 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Index() {
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const data = useLoaderData<typeof loader>();
 
   const [searchParams] = useSearchParams();
@@ -65,7 +67,7 @@ export default function Index() {
     "disponible",
     "estado",
   ];
-  const rows = data.map((element) => [
+  const rows = data.map((element: any) => [
     element.sku,
     element.handle,
     element.title,
@@ -76,20 +78,25 @@ export default function Index() {
   ]);
 
   const submitUpload = (formData: FormData) => {
+    setIsSubmiting(true);
     fileUploader(formData, {
       action: "parse",
       method: "post",
       encType: "multipart/form-data",
       navigate: false,
     });
+    setIsSubmiting(false);
+    window.location.reload();
   };
 
   const submitUpdate = (loaderFormData: FormData) => {
+    setIsSubmiting(true);
     fileUploader(loaderFormData, {
       action: "update",
       method: "post",
       navigate: false,
     });
+    setIsSubmiting(false);
   };
 
   return (
@@ -121,6 +128,7 @@ export default function Index() {
                       <button
                         type="submit"
                         className="Polaris-Button Polaris-Button--primary"
+                        disabled={isSubmiting}
                       >
                         Cargar
                       </button>
@@ -146,8 +154,9 @@ export default function Index() {
               onClick={() => submitUpdate(loaderFormData)}
               variant="primary"
               tone="success"
+              loading={isSubmiting}
             >
-              Actualizar shopify
+              {isSubmiting ? "Actualizar shopify" : "Actualizando..."}
             </Button>
           </Layout.Section>
         </Layout>
