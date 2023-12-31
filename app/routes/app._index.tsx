@@ -20,13 +20,12 @@ import {
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
-import { InvData, PrismaPromise } from "@prisma/client";
 import { useState } from "react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
 
-  const find: PrismaPromise<InvData[]> = db.invData.findMany();
+  const find = db.invData.findMany();
 
   return find;
 };

@@ -1,4 +1,3 @@
-import { InvData } from "@prisma/client";
 import { handleRateLimit } from "./handle-rate-limit";
 import {
   GetVariantAndMetafield,
@@ -10,9 +9,9 @@ import { AdminApiContext } from "node_modules/@shopify/shopify-app-remix/build/t
 import { RestResources } from "@shopify/shopify-api/rest/admin/2023-10";
 
 export const getProductVariant = async (
-  data: InvData[],
+  data: any,
   admin: AdminApiContext<RestResources>,
-  dbData: InvData
+  dbData: any
 ): Promise<void> => {
   const queryVariables: { variables: { handle: String } } = {
     variables: {
@@ -83,7 +82,7 @@ export const getProductVariant = async (
           {
             inventoryItemId,
             locationId: "gid://shopify/Location/76335710517",
-            quantity: data.find((item) => item.handle === dbData.handle)
+            quantity: data.find((item: any) => item.handle === dbData.handle)
               ?.disponible,
           },
         ],

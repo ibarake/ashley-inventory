@@ -1,5 +1,4 @@
 import { ActionFunction } from "@remix-run/node";
-import { InvData } from "@prisma/client"; // Add these imports
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 import { redirect } from "@remix-run/node";
@@ -16,7 +15,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     const processInvData = async () => {
       while (true) {
-        const invdata: InvData[] = await db.invData.findMany({
+        const invdata = await db.invData.findMany({
           skip: page * BATCH_SIZE,
           take: BATCH_SIZE,
         });
@@ -24,7 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
         if (invdata.length === 0) break;
 
         await Promise.all(
-          invdata.map((data) => {
+          invdata.map((data: any) => {
             if (data.handle && data.sku) {
               count++;
               console.log(`Processing ${count}`);
