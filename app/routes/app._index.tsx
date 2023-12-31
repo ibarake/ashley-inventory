@@ -155,7 +155,7 @@ export default function Index() {
               tone="success"
               loading={isSubmiting}
             >
-              {isSubmiting ? "Actualizar shopify" : "Actualizando..."}
+              {!isSubmiting ? "Actualizar shopify" : "Actualizando..."}
             </Button>
           </Layout.Section>
         </Layout>
