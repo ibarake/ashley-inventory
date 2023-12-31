@@ -19,14 +19,6 @@ interface DataRow {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  processFileInBackground(request).catch((error) => {
-    console.error("Failed to process file in background:", error);
-  });
-
-  return redirect("/app");
-};
-
-async function processFileInBackground(request: Request) {
   await db.invData.deleteMany({});
 
   const formData = await unstable_parseMultipartFormData(
@@ -96,4 +88,5 @@ async function processFileInBackground(request: Request) {
     // Wait for the current batch of create operations to complete
     await Promise.all(createInvDataPromises);
   }
-}
+  return redirect("/app");
+};
