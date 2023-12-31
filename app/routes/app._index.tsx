@@ -25,7 +25,25 @@ import { useState } from "react";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
 
-  const find = db.invData.findMany();
+  const batchSize = 1000;
+  let skip = 0;
+  let allData: any[] = [];
+
+  while (true) {
+    const batchData = await db.invData.findMany({
+      take: batchSize,
+      skip,
+    });
+
+    if (batchData.length === 0) {
+      break;
+    }
+
+    allData = allData.concat(batchData);
+    skip += batchSize;
+  }
+
+  const find = allData;
 
   return find;
 };
