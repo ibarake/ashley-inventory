@@ -54,9 +54,8 @@ export const getProductVariant = async (
           namespace: "custom",
           ownerId: `${variantId}`,
           type: "single_line_text_field",
-          value: data.find(
-            (item: { handle: string }) => item.handle === dbData.handle
-          )?.fechaDisponible,
+          value: data.find((item: { sku: string }) => item.sku === dbData.sku)
+            ?.fechaDisponible,
         },
       ],
     },
@@ -82,7 +81,7 @@ export const getProductVariant = async (
           {
             inventoryItemId,
             locationId: "gid://shopify/Location/76335710517",
-            quantity: data.find((item: any) => item.handle === dbData.handle)
+            quantity: data.find((item: any) => item.sku === dbData.sku)
               ?.disponible,
           },
         ],
@@ -98,21 +97,5 @@ export const getProductVariant = async (
   console.log(
     "inventory disponible updated with",
     inventoryItemMutationVariables.variables.input.setQuantities[0].quantity
-  );
-
-  const statusVariables = {
-    variables: {
-      input: {
-        id: queryData.data.productByHandle.id,
-        status: String(dbData.estado).toUpperCase(),
-      },
-    },
-  };
-
-  await handleRateLimit(admin.graphql, [statusUpdate, statusVariables]);
-
-  console.log(
-    "product status updated with",
-    statusVariables.variables.input.status
   );
 };

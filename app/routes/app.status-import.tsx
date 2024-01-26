@@ -1,6 +1,11 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
+  Form,
   Link,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+  useSubmit,
 } from "@remix-run/react";
 import {
   Page,
@@ -9,9 +14,15 @@ import {
   Card,
   BlockStack,
   InlineStack,
-  Button
+  Button,
+  DataTable,
+  ProgressBar,
+  ColumnContentType,
+  LegacyCard,
 } from "@shopify/polaris";
+import { authenticate } from "../shopify.server";
 import db from "../db.server";
+import { useState } from "react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Parámetros para la paginación
@@ -36,26 +47,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Index() {
 
   return (
-    <Page title="Importación de columnas">
-      <BlockStack gap="500">
-        <Layout>
-          <Layout.Section>
-            <Card padding={{ xs: "800", sm: "1000" }}>
-                <Text as="p" variant="headingMd">
-                  <h1>Importación de columnas</h1>
-                </Text>
-              <InlineStack wrap={false} align="start">
-                <Link to={"/app/inventory-import"}>
-                  <Button variant="primary">Inventario y Fecha</Button>
-                </Link>
-                <Link to={"/app/status-import"}>
-                  <Button>Precio y Estado</Button>
-                </Link>
-              </InlineStack>
-            </Card>
-          </Layout.Section>
-        </Layout>
-      </BlockStack>
+    <Page title="Importación de columnas" backAction={{content: 'Products', url: '/app'}}>
+        <h1>Carga de estado</h1>
     </Page>
   );
 }

@@ -8,9 +8,10 @@ import {
   uploadHandler,
 } from "~/utils/upload-handler";
 import db from "../db.server";
+import { create } from "domain";
 
 interface DataRow {
-  Handle: string;
+  Id: string;
   Title: string;
   SKU: string;
   Available: Number;
@@ -51,42 +52,17 @@ export const action: ActionFunction = async ({ request }) => {
     const number = Number(value);
     return isNaN(number) ? 0 : number;
   };
+  const batchData = typedData.map((row) => ({
+    id: row.Id,
+    title: row.Title,
+    sku: row.SKU,
+    disponible: safeNumberConversion(row.Available),
+    fechaDisponible: row.Fecha_Disponible,
+  }));
+  const createInvDataPromises = await db.invData.createMany({
+    data: [...batchData],
+    skipDuplicates: true,
+  });
 
-  const batchSize = 10;
-  for (let i = 0; i < typedData.length; i += batchSize) {
-    const batch = typedData.slice(i, i + batchSize);
-    const createInvDataPromises = batch.map(async (dataRow) => {
-      const existingRecord = await db.invData.findUnique({
-        where: { sku: dataRow.SKU.toString() },
-      });
-      if (!existingRecord) {
-        return db.invData.create({
-          data: {
-            sku: dataRow.SKU.toString(),
-            title: dataRow.Title,
-            handle: dataRow.Handle,
-            disponible: safeNumberConversion(dataRow.Available),
-            estado: dataRow.Status,
-            fechaDisponible: dataRow.Fecha_Disponible,
-          },
-        });
-      } else {
-        console.log(`Record with SKU ${dataRow.SKU} already exists. Updating.`);
-        return db.invData.updateMany({
-          where: { sku: dataRow.SKU.toString() },
-          data: {
-            title: dataRow.Title,
-            handle: dataRow.Handle,
-            disponible: safeNumberConversion(dataRow.Available),
-            estado: dataRow.Status,
-            fechaDisponible: dataRow.Fecha_Disponible,
-          },
-        });
-      }
-    });
-
-    // Wait for the current batch of create operations to complete
-    await Promise.all(createInvDataPromises);
-  }
   return redirect("/app");
 };
