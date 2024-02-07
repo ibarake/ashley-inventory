@@ -23,9 +23,20 @@ model Session {
 }
 
 model InvData {
-  sku             String  @id
+  variantId       String  @unique
+  inventoryId     String  @unique
   title           String
-  id              String
-  disponible      Int
+  color           String
+  sku             String  @id
   fechaDisponible String?
+}
+
+model statusData {
+  id              String  @unique
+  variantId       String  @unique
+  title           String
+  color           String
+  sku             String  @id
+  status          String?
+  price           Float?
 }

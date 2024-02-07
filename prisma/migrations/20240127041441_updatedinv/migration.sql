@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "InvData" ALTER COLUMN "inventoryId" SET DATA TYPE TEXT,
+ALTER COLUMN "variantId" SET DATA TYPE TEXT;

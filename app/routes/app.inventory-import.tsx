@@ -16,15 +16,27 @@ import {
   InlineStack,
   Button,
   DataTable,
-  ProgressBar,
   ColumnContentType,
   LegacyCard,
+  Spinner
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 import { useState } from "react";
+import { bulkMutationQuery } from "~/utils/queries";
+import { InvData } from "@prisma/client";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { admin } = await authenticate.admin(request);
+
+  const bulkOperationQueryStatus = await admin.graphql(bulkMutationQuery);
+
+  const bulkOperationQueryStatusResponse = await bulkOperationQueryStatus.json();
+
+  const bulkOperationStatus = bulkOperationQueryStatusResponse.data.currentBulkOperation != null ?  bulkOperationQueryStatusResponse.data.currentBulkOperation.status : 'No hay operaciones en curso';
+
+  console.log(bulkOperationQueryStatusResponse.data.currentBulkOperation);
+  
   // Parámetros para la paginación
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get("page") || "1", 10);
@@ -41,17 +53,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Considera también devolver el total de registros para la paginación en el cliente
   const total = await db.invData.count();
 
-  return { batchData, total };
+  return { batchData, total, bulkOperationStatus };
 };
 
 export default function inventoryImport() {
   const [queryParams] = useSearchParams();
-  const [isSubmiting, setIsSubmiting] = useState(false);
   const currentPage = Number(queryParams.get("page") || 1); // Add currentPage state
   const loaderData = useLoaderData<typeof loader>();
 
+  const spinner = <Spinner accessibilityLabel="Spinner" size="small" />;
+  
   const data = loaderData.batchData;
+  const bulkOperationStatus = loaderData.bulkOperationStatus;
   const totalRows = loaderData.total; // Total de filas desde el servidor
+  const [isSubmiting, setIsSubmiting] = useState(bulkOperationStatus === 'RUNNING' ? true : false);
+  const [isSubmitingParse, setIsSubmitingParse] = useState(false);
   const totalPages = Math.ceil(totalRows / 100);
 
   const previousQuery = new URLSearchParams(queryParams);
@@ -76,44 +92,54 @@ export default function inventoryImport() {
     "text",
     "text",
     "text",
-    "numeric",
+    "text",
+    "text",
   ];
-  const headers = ["id", "sku", "title", "fechaDisponible", "disponible"];
+  const headers = ["Variant ID", "Variant Inventory Item ID", "Title", "Color", "Variant SKU", "Fecha Disponible"];
 
-  const rows = data.map((element: any) => [
-    element.id,
-    element.sku,
+  const rows = data.map((element: InvData) => [
+    element.variantId,
+    element.inventoryId,
     element.title,
+    element.color,
+    element.sku,
     element.fechaDisponible,
-    element.disponible,
   ]);
 
   const submitUpload = (formData: FormData) => {
-    setIsSubmiting(true);
+    setIsSubmitingParse(true);
     fileUploader(formData, {
-      action: "parse",
+      action: "/app/parse",
       method: "post",
       encType: "multipart/form-data",
       navigate: false,
     });
-    setIsSubmiting(false);
   };
 
   const submitUpdate = (loaderFormData: FormData) => {
     setIsSubmiting(true);
     fileUploader(loaderFormData, {
-      action: "update",
+      action: "/app/update",
       method: "post",
       navigate: false,
     });
-    setIsSubmiting(false);
   };
 
   return (
-    <Page title="Importación de columnas" backAction={{content: 'Products', url: '/app'}} primaryAction={{content: "Actualizar shopify", disabled: isSubmiting, onAction: () => submitUpdate(loaderFormData) }}>
+    <Page title="Importación de columnas" backAction={{content: 'Products', url: '/app'}} primaryAction={{content: `Actualizar Shopify`, loading: isSubmiting, onAction: () => submitUpdate(loaderFormData) }}>
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>
+            <Card padding={{ xs: "800", sm: "1000" }}>
+              <InlineStack wrap={false} align="space-between">
+                <Text as="p" variant="headingMd">
+                  Estado de la última importación
+                </Text>
+                <Text as="p" variant="headingMd">
+                  {isSubmiting ? "RUNNING" : bulkOperationStatus}{isSubmiting ? spinner : ""}
+                </Text>
+              </InlineStack>
+            </Card>
             <Card padding={{ xs: "800", sm: "1000" }}>
               <InlineStack wrap={false} align="space-between">
                 <Text as="p" variant="headingMd">
@@ -133,10 +159,10 @@ export default function inventoryImport() {
                       <input id="upload-file" name="upload-file" type="file" />
                       <button
                         type="submit"
-                        className="Polaris-Button Polaris-Button--primary"
-                        disabled={isSubmiting}
+                        className={`Polaris-Button Polaris-Button--pressable Polaris-Button--sizeMedium Polaris-Button--textAlignCenter ${ isSubmitingParse ? "Polaris-Button--disabled" : "Polaris-Button--variantPrimary"}`}
+                        aria-disabled={isSubmitingParse}
                       >
-                        Cargar
+                       {isSubmitingParse ? spinner : "Cargar" }
                       </button>
                     </label>
                   </div>
