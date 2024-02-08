@@ -14,19 +14,25 @@ import parseXML from "~/utils/parse-xml";
 
 var path = require('path');    
 
+type PartialInvData = Pick<InvData, 'variantId' | 'fechaDisponible'>;
+
 export const action: ActionFunction = async ({ request }) => {
   try {
     const { admin } = await authenticate.admin(request);
 
-    const dbData: InvData[] = [];
+    const dbData: PartialInvData[] = [];
     let offset = 0;
     let limit = 500;
-    let batch;
+    let batch: PartialInvData[];
 
     do {
       batch = await db.invData.findMany({
         skip: offset,
         take: limit,
+        select: {
+          variantId: true,
+          fechaDisponible: true
+        }
       });
       dbData.push(...batch);
       offset += limit;

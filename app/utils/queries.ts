@@ -149,6 +149,21 @@ export const statusUpdate = `
         }
       }`;
 
+export const updateVariantPrice = `
+mutation productVariantUpdate($input: ProductVariantInput!) {
+  productVariantUpdate(input: $input) {
+    productVariant {
+      id
+      title
+      price
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+`;
 
 export const webhookSubscriptionCreate = `mutation {
   webhookSubscriptionCreate(

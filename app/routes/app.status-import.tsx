@@ -96,7 +96,7 @@ export default function statusImport() {
     "text",
     "numeric"
   ];
-  const headers = ["Variant ID", "Variant Inventory Item ID", "Title", "Color", "Variant SKU", "status", "price"];
+  const headers = ["Product ID", "Variant ID", "Title", "Color", "Variant SKU", "status", "price"];
 
   const rows = data.map((element: statusData) => [
     element.id,
@@ -208,9 +208,9 @@ export default function statusImport() {
                 headings={headers}
                 rows={rows}
                 footerContent={`Página ${currentPage} de ${totalPages} paginas. Visualizando registros ${
-                  rows.length * currentPage - rows.length
+                  currentPage === totalPages ? totalRows - rows.length : rows.length * currentPage - rows.length
                 } a ${
-                  rows.length * currentPage
+                  currentPage === totalPages ? totalRows : rows.length * currentPage
                 } de ${totalRows} registros en total`}
               />
               <div

@@ -12,21 +12,27 @@ import * as fs from 'fs';
 import uploadFile from "../utils/upload-files";
 import parseXML from "~/utils/parse-xml";
 
-var path = require('path');    
+var path = require('path');
+
+type PartialStatusData = Pick<statusData, 'id' | 'status'>;
 
 export const action: ActionFunction = async ({ request }) => {
   try {
     const { admin } = await authenticate.admin(request);
 
-    const dbData: statusData[] = [];
+    const dbData: PartialStatusData[] = [];
     let offset = 0;
     let limit = 500;
-    let batch;
+    let batch: PartialStatusData[];
 
     do {
       batch = await db.statusData.findMany({
         skip: offset,
         take: limit,
+        select: {
+          id: true,
+          status: true
+        }
       });
       dbData.push(...batch);
       offset += limit;

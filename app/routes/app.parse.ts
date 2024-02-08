@@ -19,10 +19,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (!isUploadedFile(file) || file.type !== allowedMimeTypes.csv) {
     throw new Error("CSV files only");
   }
-  const safeNumberConversion = (value: String | Number) => {
-    const number = parseInt(value.toString(), 10);
-    return isNaN(number) ? parseInt("0") : number;
-  };
 
   const processBatch = async (batch: InvData[]) => {
     await db.invData.createMany({
@@ -40,5 +36,5 @@ export const action: ActionFunction = async ({ request }) => {
 
   await parseCSVFromFile(file.filepath, processBatch);
 
-  return redirect("/app");
+  return redirect("/app/inventory-import");
 };

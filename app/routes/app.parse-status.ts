@@ -21,6 +21,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const processBatch = async (batch: statusData[]) => {
+
     await db.statusData.createMany({
       data: batch.map((row) => ({
         id: row.id,
@@ -35,7 +36,37 @@ export const action: ActionFunction = async ({ request }) => {
     });
   };
 
+  // New logic to enforce status rules for repeated IDs
+  // Find IDs with at least one 'active' status
+  const recordsWithActiveStatus = await db.statusData.findMany({
+    where: {
+      status: 'Active',
+    },
+    select: {
+      id: true, // Select only the ID
+    },
+  });
+
+  // Extract unique IDs
+  const uniqueActiveIds = Array.from(new Set(recordsWithActiveStatus.map(record => record.id)));
+
+  // Update all entries for these IDs to 'active' status, if not already
+  for (const id of uniqueActiveIds) {
+    await db.statusData.updateMany({
+      where: {
+        id: id,
+        status: {
+          not: 'Active',
+        },
+      },
+      data: {
+        status: 'Active',
+      },
+    });
+  }
+
+
   await parseCSVFromFileStatus(file.filepath, processBatch);
 
-  return redirect("/app");
+  return redirect("/app/status-import");
 };
