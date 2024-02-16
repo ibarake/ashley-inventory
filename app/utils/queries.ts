@@ -170,7 +170,7 @@ export const webhookSubscriptionCreate = `mutation {
     topic: BULK_OPERATIONS_FINISH
     webhookSubscription: {
       format: JSON,
-      callbackUrl: "https://ethiopia-choices-wc-objectives.trycloudflare.com/webhooks"}
+      callbackUrl: "${process.env.SHOPIFY_APP_URL}/webhooks"}
   ) {
     userErrors {
       field
