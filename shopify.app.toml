@@ -2,19 +2,19 @@
 
 name = "manejo-inventario-ashley"
 client_id = "04664990a1d1d52fbdc089346929012a"
-application_url = "https://groove-bath-morris-them.trycloudflare.com"
+application_url = "https://places-grid-pty-skirt.trycloudflare.com"
 embedded = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products, read_inventory, write_inventory"
+scopes = "write_products,read_inventory,write_inventory"
 
 [auth]
 redirect_urls = [
-  "https://groove-bath-morris-them.trycloudflare.com/auth/callback",
-  "https://groove-bath-morris-them.trycloudflare.com/auth/shopify/callback",
-  "https://groove-bath-morris-them.trycloudflare.com/api/auth/callback",
-  "https://groove-bath-morris-them.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://places-grid-pty-skirt.trycloudflare.com/auth/callback",
+  "https://places-grid-pty-skirt.trycloudflare.com/auth/shopify/callback",
+  "https://places-grid-pty-skirt.trycloudflare.com/api/auth/callback",
+  "https://places-grid-pty-skirt.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]

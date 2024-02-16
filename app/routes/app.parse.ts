@@ -8,85 +8,33 @@ import {
   uploadHandler,
 } from "~/utils/upload-handler";
 import db from "../db.server";
-
-interface DataRow {
-  Handle: string;
-  Title: string;
-  SKU: string;
-  Available: Number;
-  Status: string;
-  Fecha_Disponible: string;
-}
+import { InvData } from "@prisma/client";
 
 export const action: ActionFunction = async ({ request }) => {
   await db.invData.deleteMany({});
 
-  const formData = await unstable_parseMultipartFormData(
-    request,
-    uploadHandler
-  );
-
+  const formData = await unstable_parseMultipartFormData(request, uploadHandler);
   const file = formData.get("upload-file");
 
-  if (!isUploadedFile(file)) return null;
-
-  let rawData: unknown;
-  if (file.type === allowedMimeTypes.csv) {
-    rawData = await parseCSVFromFile(file.filepath);
-  } else {
+  if (!isUploadedFile(file) || file.type !== allowedMimeTypes.csv) {
     throw new Error("CSV files only");
-    return null;
   }
 
-  // Assert that rawData is an array of DataRow objects
-  if (
-    !Array.isArray(rawData) ||
-    !rawData.every((row) => typeof row === "object")
-  ) {
-    throw new Error("Invalid data format");
-  }
-  const typedData = rawData as DataRow[];
-
-  const safeNumberConversion = (value: String | Number) => {
-    const number = Number(value);
-    return isNaN(number) ? 0 : number;
+  const processBatch = async (batch: InvData[]) => {
+    await db.invData.createMany({
+      data: batch.map((row) => ({
+        variantId: row.variantId,
+        inventoryId: row.inventoryId,
+        title: row.title,
+        color: row.color,
+        sku: row.sku,
+        fechaDisponible: row.fechaDisponible,
+      })),
+      skipDuplicates: true
+    });
   };
 
-  const batchSize = 10;
-  for (let i = 0; i < typedData.length; i += batchSize) {
-    const batch = typedData.slice(i, i + batchSize);
-    const createInvDataPromises = batch.map(async (dataRow) => {
-      const existingRecord = await db.invData.findUnique({
-        where: { sku: dataRow.SKU.toString() },
-      });
-      if (!existingRecord) {
-        return db.invData.create({
-          data: {
-            sku: dataRow.SKU.toString(),
-            title: dataRow.Title,
-            handle: dataRow.Handle,
-            disponible: safeNumberConversion(dataRow.Available),
-            estado: dataRow.Status,
-            fechaDisponible: dataRow.Fecha_Disponible,
-          },
-        });
-      } else {
-        console.log(`Record with SKU ${dataRow.SKU} already exists. Updating.`);
-        return db.invData.updateMany({
-          where: { sku: dataRow.SKU.toString() },
-          data: {
-            title: dataRow.Title,
-            handle: dataRow.Handle,
-            disponible: safeNumberConversion(dataRow.Available),
-            estado: dataRow.Status,
-            fechaDisponible: dataRow.Fecha_Disponible,
-          },
-        });
-      }
-    });
+  await parseCSVFromFile(file.filepath, processBatch);
 
-    // Wait for the current batch of create operations to complete
-    await Promise.all(createInvDataPromises);
-  }
-  return redirect("/app");
+  return redirect("/app/inventory-import");
 };
