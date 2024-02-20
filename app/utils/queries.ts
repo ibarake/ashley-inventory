@@ -170,7 +170,7 @@ export const webhookSubscriptionCreate = `mutation {
     topic: BULK_OPERATIONS_FINISH
     webhookSubscription: {
       format: JSON,
-      callbackUrl: "${process.env.SHOPIFY_APP_URL}/webhooks"}
+      callbackUrl: "https://ashley-inventory-app-e635e23a891d.herokuapp.com/webhooks"}
   ) {
     userErrors {
       field
