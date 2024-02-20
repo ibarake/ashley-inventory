@@ -2,7 +2,7 @@
 
 name = "manejo-inventario-ashley"
 client_id = "04664990a1d1d52fbdc089346929012a"
-application_url = "https://ashley-inventory-app-e635e23a891d.herokuapp.com"
+application_url = "https://apr-caribbean-wichita-obtain.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products,read_inventory,write_inventory"
 
 [auth]
 redirect_urls = [
-  "https://ashley-inventory-app-e635e23a891d.herokuapp.com/auth/callback",
-  "https://ashley-inventory-app-e635e23a891d.herokuapp.com/auth/shopify/callback",
-  "https://ashley-inventory-app-e635e23a891d.herokuapp.com/api/auth/callback",
-  "https://ashley-inventory-app-e635e23a891d.herokuapp.com/.shopify/graphiql/auth/callback"
+  "https://apr-caribbean-wichita-obtain.trycloudflare.com/auth/callback",
+  "https://apr-caribbean-wichita-obtain.trycloudflare.com/auth/shopify/callback",
+  "https://apr-caribbean-wichita-obtain.trycloudflare.com/api/auth/callback",
+  "https://apr-caribbean-wichita-obtain.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
