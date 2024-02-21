@@ -10,6 +10,22 @@ import {
 import db from "../db.server";
 import { statusData } from "@prisma/client";
 
+const processBatch = async (batch: statusData[]) => {
+
+  await db.statusData.createMany({
+    data: batch.map((row) => ({
+      id: row.id,
+      variantId: row.variantId,
+      title: row.title,
+      color: row.color,
+      sku: row.sku,
+      status: row.status,
+      price: row.price,
+    })),
+    skipDuplicates: true
+  });
+};
+
 export const action: ActionFunction = async ({ request }) => {
   await db.statusData.deleteMany({});
 
@@ -19,22 +35,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (!isUploadedFile(file) || file.type !== allowedMimeTypes.csv) {
     throw new Error("CSV files only");
   }
-
-  const processBatch = async (batch: statusData[]) => {
-
-    await db.statusData.createMany({
-      data: batch.map((row) => ({
-        id: row.id,
-        variantId: row.variantId,
-        title: row.title,
-        color: row.color,
-        sku: row.sku,
-        status: row.status,
-        price: row.price,
-      })),
-      skipDuplicates: true
-    });
-  };
 
   // New logic to enforce status rules for repeated IDs
   // Find IDs with at least one 'active' status

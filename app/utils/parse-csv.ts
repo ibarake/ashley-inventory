@@ -2,7 +2,7 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { InvData } from "@prisma/client";
 
-const BATCH_SIZE = 500; // Adjust this based on your needs
+const BATCH_SIZE = 300; // Adjust this based on your needs
 
 export async function parseCSVFromFile(filePath: string, processBatch: (batch: InvData[]) => Promise<void>): Promise<void> {
   return new Promise(async (resolve) => {
