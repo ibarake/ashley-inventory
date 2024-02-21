@@ -96,7 +96,7 @@ export default function statusImport() {
     "text",
     "numeric"
   ];
-  const headers = ["Product ID", "Variant ID", "Title", "Color", "Variant SKU", "status", "price"];
+  const headers = ["Product ID", "Variant ID", "Variant SKU", "Title", "Color", "status", "price"];
 
   const rows = data.map((element: statusData) => [
     element.id,

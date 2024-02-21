@@ -27,46 +27,48 @@ const processBatch = async (batch: statusData[]) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  await db.statusData.deleteMany({});
+  new Promise(async (resolve) => {
+    await db.statusData.deleteMany({});
 
-  const formData = await unstable_parseMultipartFormData(request, uploadHandler);
-  const file = formData.get("upload-file");
+    const formData = await unstable_parseMultipartFormData(request, uploadHandler);
+    const file = formData.get("upload-file");
 
-  if (!isUploadedFile(file) || file.type !== allowedMimeTypes.csv) {
-    throw new Error("CSV files only");
-  }
+    if (!isUploadedFile(file) || file.type !== allowedMimeTypes.csv) {
+      throw new Error("CSV files only");
+    }
 
 
-  await parseCSVFromFileStatus(file.filepath, processBatch);
+    await parseCSVFromFileStatus(file.filepath, processBatch);
 
-  // New logic to enforce status rules for repeated IDs
-  // Find IDs with at least one 'active' status
-  const recordsWithActiveStatus = await db.statusData.findMany({
-    where: {
-      status: 'Active',
-    },
-    select: {
-      id: true, // Select only the ID
-    },
-  });
-
-  // Extract unique IDs
-  const uniqueActiveIds = Array.from(new Set(recordsWithActiveStatus.map(record => record.id)));
-
-  // Update all entries for these IDs to 'active' status, if not already
-  for (const id of uniqueActiveIds) {
-    await db.statusData.updateMany({
+    // New logic to enforce status rules for repeated IDs
+    // Find IDs with at least one 'active' status
+    const recordsWithActiveStatus = await db.statusData.findMany({
       where: {
-        id: id,
-        status: {
-          not: 'Active',
-        },
-      },
-      data: {
         status: 'Active',
       },
+      select: {
+        id: true, // Select only the ID
+      },
     });
-  }
+
+    // Extract unique IDs
+    const uniqueActiveIds = Array.from(new Set(recordsWithActiveStatus.map(record => record.id)));
+
+    // Update all entries for these IDs to 'active' status, if not already
+    for (const id of uniqueActiveIds) {
+      await db.statusData.updateMany({
+        where: {
+          id: id,
+          status: {
+            not: 'Active',
+          },
+        },
+        data: {
+          status: 'Active',
+        },
+      });
+    }
+  });
 
   return redirect("/app/status-import");
 };
