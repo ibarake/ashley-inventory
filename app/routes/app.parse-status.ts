@@ -36,6 +36,9 @@ export const action: ActionFunction = async ({ request }) => {
     throw new Error("CSV files only");
   }
 
+
+  await parseCSVFromFileStatus(file.filepath, processBatch);
+
   // New logic to enforce status rules for repeated IDs
   // Find IDs with at least one 'active' status
   const recordsWithActiveStatus = await db.statusData.findMany({
@@ -64,9 +67,6 @@ export const action: ActionFunction = async ({ request }) => {
       },
     });
   }
-
-
-  await parseCSVFromFileStatus(file.filepath, processBatch);
 
   return redirect("/app/status-import");
 };
