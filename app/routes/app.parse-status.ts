@@ -10,23 +10,23 @@ import {
 import db from "../db.server";
 import { statusData } from "@prisma/client";
 
-const processBatchStatus = async (batch: statusData[]) => {
-
-  await db.statusData.createMany({
-    data: batch.map((row) => ({
-      id: row.id,
-      variantId: row.variantId,
-      title: row.title,
-      color: row.color,
-      sku: row.sku,
-      status: row.status,
-      price: row.price,
-    })),
-    skipDuplicates: true
-  });
-};
-
 export const action: ActionFunction = async ({ request }) => {
+  const processBatchStatus = async (batch: statusData[]) => {
+
+    await db.statusData.createMany({
+      data: batch.map((row) => ({
+        id: row.id,
+        variantId: row.variantId,
+        title: row.title,
+        color: row.color,
+        sku: row.sku,
+        status: row.status,
+        price: row.price,
+      })),
+      skipDuplicates: true
+    });
+  };
+
   await db.statusData.deleteMany({});
 
   const formData = await unstable_parseMultipartFormData(request, uploadHandler);
