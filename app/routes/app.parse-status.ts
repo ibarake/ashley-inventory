@@ -54,19 +54,19 @@ export const action: ActionFunction = async ({ request }) => {
   const uniqueActiveIds = Array.from(new Set(recordsWithActiveStatus.map(record => record.id)));
 
   // Update all entries for these IDs to 'active' status, if not already
-  for (const id of uniqueActiveIds) {
-    await db.statusData.updateMany({
-      where: {
-        id: id,
-        status: {
-          not: 'Active',
-        },
+  await db.statusData.updateMany({
+    where: {
+      id: {
+        in: uniqueActiveIds,
       },
-      data: {
-        status: 'Active',
+      status: {
+        not: 'Active',
       },
-    });
-  }
+    },
+    data: {
+      status: 'Active',
+    },
+  });
 
   return redirect("/app/status-import");
 };
