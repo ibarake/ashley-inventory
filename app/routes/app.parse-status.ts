@@ -10,7 +10,7 @@ import {
 import db from "../db.server";
 import { statusData } from "@prisma/client";
 
-const processBatch = async (batch: statusData[]) => {
+const processBatchStatus = async (batch: statusData[]) => {
 
   await db.statusData.createMany({
     data: batch.map((row) => ({
@@ -37,7 +37,9 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
 
-  await parseCSVFromFileStatus(file.filepath, processBatch);
+  const parse = await parseCSVFromFileStatus(file.filepath, processBatchStatus);
+
+  console.log(parse)
 
   // New logic to enforce status rules for repeated IDs
   // Find IDs with at least one 'active' status
@@ -50,11 +52,13 @@ export const action: ActionFunction = async ({ request }) => {
     },
   });
 
+  console.log(recordsWithActiveStatus)
+
   // Extract unique IDs
   const uniqueActiveIds = Array.from(new Set(recordsWithActiveStatus.map(record => record.id)));
 
   // Update all entries for these IDs to 'active' status, if not already
-  await db.statusData.updateMany({
+  const update = await db.statusData.updateMany({
     where: {
       id: {
         in: uniqueActiveIds,
@@ -67,6 +71,8 @@ export const action: ActionFunction = async ({ request }) => {
       status: 'Active',
     },
   });
+
+  console.log(update)
 
   return redirect("/app/status-import");
 };
