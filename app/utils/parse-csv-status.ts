@@ -2,7 +2,7 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { statusData } from "@prisma/client";
 
-const BATCH_SIZE = 300; // Adjust this based on your needs
+const BATCH_SIZE = 350; // Adjust this based on your needs
 
 const safeNumberConversion = (value: String) => {
   const number = parseInt(value.toString(), 10);
