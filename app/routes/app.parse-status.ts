@@ -27,6 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
     });
   };
 
+  console.log('Deleting all status data')
   await db.statusData.deleteMany({});
 
   const formData = await unstable_parseMultipartFormData(request, uploadHandler);
@@ -36,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
     throw new Error("CSV files only");
   }
 
-
+  console.log('Parsing and uploading CSV data to statusData table')
   const parse = await parseCSVFromFileStatus(file.filepath, processBatchStatus);
 
   console.log(parse)
