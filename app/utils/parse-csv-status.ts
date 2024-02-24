@@ -40,13 +40,13 @@ export async function parseCSVFromFileStatus(filePath: string): Promise<void> {
 
   for await (const record of parser) {
     const dataRow: statusData = {
-      id: record[0].toString(),
-      variantId: record[1].toString(),
-      title: record[2].toString(),
-      color: record[3].toString(),
-      sku: record[4].toString(),
-      status: record[5].toString(),
-      price: safeNumberConversion(record[6].toString()),
+      id: record[0] ? record[0].toString() : "",
+      variantId: record[1] ? record[1].toString() : "",
+      title: record[2] ? record[2].toString() : "",
+      color: record[3] ? record[3].toString() : "",
+      sku: record[4] ? record[4].toString() : "",
+      status: record[5] ? record[5].toString() : "",
+      price: record[6] ? safeNumberConversion(record[6].toString()) : 0,
     };
 
     batch.push(dataRow);
