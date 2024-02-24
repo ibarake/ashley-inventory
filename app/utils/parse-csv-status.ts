@@ -3,7 +3,7 @@ import fs from "fs";
 import { statusData } from "@prisma/client";
 import db from "../db.server";
 
-const BATCH_SIZE = 500; // Adjust this based on your needs
+const BATCH_SIZE = 15000; // Adjust this based on your needs
 
 const safeNumberConversion = (value: String) => {
   const number = parseInt(value.toString(), 10);
