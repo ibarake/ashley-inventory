@@ -39,6 +39,7 @@ export async function parseCSVFromFileStatus(filePath: string): Promise<void> {
     let batch: statusData[] = [];
 
   for await (const record of parser) {
+    console.log(record);
     const dataRow: statusData = {
       id: record[0] ? record[0].toString() : "",
       variantId: record[1] ? record[1].toString() : "",
