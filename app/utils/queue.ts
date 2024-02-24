@@ -1,23 +1,17 @@
 import Bull from 'bull';
 import { processCSVJob } from './process-csv-job'; // You will create this function next
 
-// Use the Heroku Redis URL from your environment variables
-const redisUrl = process.env.REDIS_URL; // Make sure this is set in your environment
-
-const connectionOptions = {
-  redis: {
-    url: redisUrl,
-    tls: {
-      rejectUnauthorized: false, // This is often necessary for Heroku Redis connections
-    },
-  },
+// Configure your Redis connection details
+const redisConfig = {
+  host: process.env.REDIS_HOST || 'localhost',
+  port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
+  password: process.env.REDIS_PASSWORD || undefined,
 };
 
-// Create a new Bull queue for CSV processing with the connection options
-export const csvQueue = new Bull('csv-processing', connectionOptions);
+// Create a new Bull queue for CSV processing
+export const csvQueue = new Bull('csv-processing', { redis: redisConfig });
 
 // Process jobs in concurrency, adjust '5' to your needs
 csvQueue.process(5, async (job) => {
-    console.log('Processing CSV job:', job.id);
   return processCSVJob(job);
 });
