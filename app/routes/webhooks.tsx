@@ -38,7 +38,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     case "BULK_OPERATIONS_FINISH":
       const bulkOperationQueryStatus = await admin.graphql(bulkMutationQuery);
 
+      console.log(bulkOperationQueryStatus)
+
       const bulkOperationQueryStatusResponse = await bulkOperationQueryStatus.json();
+
+      console.log(bulkOperationQueryStatusResponse);
 
       console.log(bulkOperationQueryStatusResponse.data.node);
 

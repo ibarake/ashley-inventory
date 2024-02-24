@@ -5,6 +5,7 @@ type QueryData = {
   
 
 export default function getMutationType(data: QueryData): string | null {
+    console.log(data)
     const query = data.query;
 
     // Regular expression to match the mutation pattern
