@@ -18,5 +18,6 @@ export const csvQueue = new Bull('csv-processing', connectionOptions);
 
 // Process jobs in concurrency, adjust '5' to your needs
 csvQueue.process(5, async (job) => {
+    console.log('Processing CSV job:', job.id);
   return processCSVJob(job);
 });
