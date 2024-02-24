@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { parseCSVFromFile } from "~/utils/parse-csv";
 import {
   allowedMimeTypes,
@@ -8,7 +8,7 @@ import {
   uploadHandler,
 } from "~/utils/upload-handler";
 import db from "../db.server";
-import { InvData } from "@prisma/client";
+import { csvQueue } from "~/utils/queue";
 
 export const action: ActionFunction = async ({ request }) => {
   await db.invData.deleteMany({});
@@ -20,21 +20,8 @@ export const action: ActionFunction = async ({ request }) => {
     throw new Error("CSV files only");
   }
 
-  const processBatch = async (batch: InvData[]) => {
-    await db.invData.createMany({
-      data: batch.map((row) => ({
-        variantId: row.variantId,
-        inventoryId: row.inventoryId,
-        title: row.title,
-        color: row.color,
-        sku: row.sku,
-        fechaDisponible: row.fechaDisponible,
-      })),
-      skipDuplicates: true
-    });
-  };
-
-  await parseCSVFromFile(file.filepath, processBatch);
+  console.log('Enqueuing CSV data for background processing');
+  csvQueue.add({ filepath: file.filepath, callbackfnc: parseCSVFromFile });
 
   return redirect("/app/inventory-import");
 };

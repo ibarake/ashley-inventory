@@ -15,6 +15,6 @@ const redisConfig = {
 export const csvQueue = new Bull('csv-processing', { redis: redisConfig });
 
 // Process jobs in concurrency, adjust '5' to your needs
-csvQueue.process(1, async (job) => {
+csvQueue.process(5, async (job) => {
   return processCSVJob(job);
 });

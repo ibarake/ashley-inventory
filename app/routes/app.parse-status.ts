@@ -3,6 +3,7 @@ import { redirect, unstable_parseMultipartFormData } from '@remix-run/node';
 import { csvQueue } from '~/utils/queue'; // Adjust the path as necessary
 import { allowedMimeTypes, isUploadedFile, uploadHandler } from '~/utils/upload-handler';
 import db from '../db.server';
+import { parseCSVFromFileStatus } from '../utils/parse-csv-status';
 
 export const action: ActionFunction = async ({ request }) => {
   console.log('Deleting all status data');
@@ -17,8 +18,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   console.log('Enqueuing CSV data for background processing');
-  console.log(csvQueue)
-  csvQueue.add({ filepath: file.filepath });
+  csvQueue.add({ filepath: file.filepath, callbackfnc: parseCSVFromFileStatus });
 
   return redirect('/app/status-import');
 };

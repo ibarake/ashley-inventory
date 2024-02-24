@@ -1,10 +1,25 @@
 import { parse } from "csv-parse";
 import fs from "fs";
 import { InvData } from "@prisma/client";
+import db from "../db.server";
 
 const BATCH_SIZE = 500; // Adjust this based on your needs
 
-export async function parseCSVFromFile(filePath: string, processBatch: (batch: InvData[]) => Promise<void>): Promise<void> {
+const processBatch = async (batch: InvData[]) => {
+  await db.invData.createMany({
+    data: batch.map((row) => ({
+      variantId: row.variantId,
+      inventoryId: row.inventoryId,
+      title: row.title,
+      color: row.color,
+      sku: row.sku,
+      fechaDisponible: row.fechaDisponible,
+    })),
+    skipDuplicates: true
+  });
+};
+
+export async function parseCSVFromFile(filePath: string): Promise<void> {
   return new Promise(async (resolve) => {
     const parser = fs.createReadStream(filePath).pipe(
       parse({
