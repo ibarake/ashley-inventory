@@ -125,8 +125,15 @@ export default function inventoryImport() {
     });
   };
 
+  const deleteEverything = () => {
+    setIsSubmiting(true);
+    fetch('/app/delete-fecha', {
+      method: 'POST'
+    })
+  }
+
   return (
-    <Page title="Importación de columnas" backAction={{content: 'Products', url: '/app'}} primaryAction={{content: `Actualizar Shopify`, loading: isSubmiting, onAction: () => submitUpdate(loaderFormData) }}>
+    <Page title="Importación de columnas" backAction={{content: 'Products', url: '/app'}} primaryAction={{content: `Actualizar Shopify`, loading: isSubmiting, onAction: () => submitUpdate(loaderFormData) }} secondaryActions={[{ content: `Borrar BD`, loading: isSubmiting, onAction: () => deleteEverything() }]}>
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>
