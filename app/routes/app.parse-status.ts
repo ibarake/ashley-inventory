@@ -1,5 +1,5 @@
 import type { ActionFunction } from "@remix-run/node";
-import { unstable_parseMultipartFormData } from "@remix-run/node";
+import { redirect, unstable_parseMultipartFormData } from "@remix-run/node";
 import { parseCSVFromFileStatus } from "~/utils/parse-csv-status";
 import {
   allowedMimeTypes,
@@ -41,11 +41,5 @@ export const action: ActionFunction = async ({ request }) => {
 
   console.log(parse)
 
-  // Immediately return a response to avoid timeout
-  return new Response(JSON.stringify({ status: "processing" }), {
-    status: 202, // Accepted status code
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return redirect("/app/status-import");
 };
