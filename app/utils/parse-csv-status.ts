@@ -1,6 +1,7 @@
 import { parse } from "csv-parse";
 import fs from "fs";
 import { statusData } from "@prisma/client";
+import db from "../db.server";
 
 const BATCH_SIZE = 500; // Adjust this based on your needs
 
@@ -9,7 +10,23 @@ const safeNumberConversion = (value: String) => {
   return isNaN(number) ? parseInt("0") : number;
 };
 
-export async function parseCSVFromFileStatus(filePath: string, processBatch: (batch: statusData[]) => Promise<void>): Promise<void> {
+const processBatch = async (batch: statusData[]) => {
+
+  await db.statusData.createMany({
+    data: batch.map((row) => ({
+      id: row.id,
+      variantId: row.variantId,
+      title: row.title,
+      color: row.color,
+      sku: row.sku,
+      status: row.status,
+      price: row.price,
+    })),
+    skipDuplicates: true
+  });
+};
+
+export async function parseCSVFromFileStatus(filePath: string): Promise<void> {
   return new Promise(async (resolve) => {
     const parser = fs.createReadStream(filePath).pipe(
       parse({
