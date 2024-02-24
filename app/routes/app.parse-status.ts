@@ -18,7 +18,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   console.log('Enqueuing CSV data for background processing');
-  csvQueue.add({ filepath: file.filepath, callbackfnc: parseCSVFromFileStatus });
+  csvQueue.add({ filepath: file.filepath, parse: "status" });
 
   return redirect('/app/status-import');
 };

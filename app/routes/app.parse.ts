@@ -21,7 +21,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   console.log('Enqueuing CSV data for background processing');
-  csvQueue.add({ filepath: file.filepath, callbackfnc: parseCSVFromFile });
+  csvQueue.add({ filepath: file.filepath, parse: "inv" });
 
   return redirect("/app/inventory-import");
 };
