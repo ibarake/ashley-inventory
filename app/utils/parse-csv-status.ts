@@ -2,7 +2,7 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { statusData } from "@prisma/client";
 
-const BATCH_SIZE = 350; // Adjust this based on your needs
+const BATCH_SIZE = 500; // Adjust this based on your needs
 
 const safeNumberConversion = (value: String) => {
   const number = parseInt(value.toString(), 10);
@@ -22,6 +22,7 @@ export async function parseCSVFromFileStatus(filePath: string, processBatch: (ba
     let batch: statusData[] = [];
 
   for await (const record of parser) {
+    console.log(record.toString())
     const dataRow: statusData = {
       id: record[0].toString(),
       variantId: record[1].toString(),

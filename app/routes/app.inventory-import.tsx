@@ -114,9 +114,6 @@ export default function inventoryImport() {
       encType: "multipart/form-data",
       navigate: false,
     });
-    fetch('/app/status-fix', {
-      method: 'POST'
-    })
   };
 
   const submitUpdate = (loaderFormData: FormData) => {
