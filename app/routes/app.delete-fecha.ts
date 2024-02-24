@@ -3,7 +3,9 @@ import { redirect } from "@remix-run/node";
 import db from "../db.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  const deleteStatus = db.invData.deleteMany({});
+    console.log('Deleting all inv data');
+    const deleteInv = await db.invData.deleteMany({});
+    console.log('Deleted all inv data');
 
-  return redirect("/app/status-import");
+    return redirect("/app/status-import");
 };
