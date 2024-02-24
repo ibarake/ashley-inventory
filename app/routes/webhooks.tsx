@@ -67,7 +67,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
         //creating Json from DB data
       const MutationInputs = dbData.map((item) => {
-        const MutationVariables = { input: { id: item.id, price: item.price } };
+        const MutationVariables = { input: { id: `gid://shopify/Product/${item.id}`, price: item.price } };
         return MutationVariables;
       });
       //converting JSON to JSONL
