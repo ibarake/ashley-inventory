@@ -127,9 +127,12 @@ export default function inventoryImport() {
 
   const deleteEverything = () => {
     setIsSubmiting(true);
-    fetch('/app/delete-fecha', {
-      method: 'POST'
-    })
+    fileUploader(true, {
+      action: "/app/delete-fecha",
+      method: "post",
+      navigate: false,
+    });
+    setIsSubmiting(false);
   }
 
   return (

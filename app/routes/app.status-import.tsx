@@ -132,9 +132,12 @@ export default function statusImport() {
 
   const deleteEverything = () => {
     setIsSubmiting(true);
-    fetch('/app/delete-status', {
-      method: 'POST'
-    })
+    fileUploader(true, {
+      action: "/app/delete-status",
+      method: "post",
+      navigate: false,
+    });
+    setIsSubmiting(false);
   }
 
   return (
