@@ -37,9 +37,15 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   console.log('Parsing and uploading CSV data to statusData table')
-  const parse = await parseCSVFromFileStatus(file.filepath, processBatchStatus);
+  const parse = parseCSVFromFileStatus(file.filepath, processBatchStatus);
 
   console.log(parse)
 
-  return parse;
+  // Immediately return a response to avoid timeout
+  return new Response(JSON.stringify({ status: "processing" }), {
+    status: 202, // Accepted status code
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
