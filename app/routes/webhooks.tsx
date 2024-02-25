@@ -46,7 +46,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       console.log(bulkOperationQueryStatusResponse.data.node);
 
-      const mutationType = getMutationType(bulkOperationQueryStatusResponse.data.node);
+      const mutationType = getMutationType(bulkOperationQueryStatusResponse.data.currentBulkOperation);
 
       console.log("mutation type: ", mutationType);
 
