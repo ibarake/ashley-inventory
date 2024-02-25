@@ -70,6 +70,7 @@ export const bulkMutationQuery = `query {
      fileSize
      url
      partialDataUrl
+     query
   }
  }`
 
