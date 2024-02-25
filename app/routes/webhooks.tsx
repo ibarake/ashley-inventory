@@ -37,17 +37,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       break;
     case "BULK_OPERATIONS_FINISH":
       const bulkOperationQueryStatus = await admin.graphql(bulkMutationQuery);
-
-      console.log(bulkOperationQueryStatus)
-
       const bulkOperationQueryStatusResponse = await bulkOperationQueryStatus.json();
-
-      console.log(bulkOperationQueryStatusResponse);
-
-      console.log(bulkOperationQueryStatusResponse.data.node);
-
       const mutationType = getMutationType(bulkOperationQueryStatusResponse.data.currentBulkOperation);
-
+      console.log(bulkOperationQueryStatusResponse);
       console.log("mutation type: ", mutationType);
 
       if (mutationType === "productUpdate") {
@@ -71,7 +63,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
         //creating Json from DB data
       const MutationInputs = dbData.map((item) => {
-        const MutationVariables = { input: { id: `gid://shopify/productVariant/${item.variantId}`, price: item.price } };
+        console.log(item.variantId, item.price)
+        const MutationVariables = { input: { id: `gid://shopify/ProductVariant/${item.variantId}`, price: item.price } };
         return MutationVariables;
       });
       //converting JSON to JSONL
