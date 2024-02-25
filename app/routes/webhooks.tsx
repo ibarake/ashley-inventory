@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       console.log("mutation type: ", mutationType);
 
-      if (mutationType === "productUpdate") {
+      if (mutationType === "productVariantUpdate") {
         const dbData: PartialStatusData[] = [];
         let offset = 0;
         let limit = 100;
