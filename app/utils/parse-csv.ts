@@ -5,7 +5,7 @@ import db from "../db.server";
 
 const BATCH_SIZE = 500; // Adjust this based on your needs
 
-const processBatch = async (batch: InvData[]) => {
+const processBatchInv = async (batch: InvData[]) => {
   await db.invData.createMany({
     data: batch.map((row) => ({
       variantId: row.variantId,
@@ -44,13 +44,13 @@ export async function parseCSVFromFile(filePath: string): Promise<void> {
     batch.push(dataRow);
 
     if (batch.length >= BATCH_SIZE) {
-      await processBatch(batch);
+      await processBatchInv(batch);
       batch = [];
     }
   }
 
   if (batch.length > 0) {
-    await processBatch(batch);
+    await processBatchInv(batch);
   }
 
   await fs.promises.rm(filePath); // Remove the file

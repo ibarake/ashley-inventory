@@ -2,7 +2,7 @@
 
 name = "manejo-inventario-ashley"
 client_id = "04664990a1d1d52fbdc089346929012a"
-application_url = "https://associated-consoles-roof-all.trycloudflare.com"
+application_url = "https://voices-thesis-refuse-centered.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products,read_inventory,write_inventory"
 
 [auth]
 redirect_urls = [
-  "https://associated-consoles-roof-all.trycloudflare.com/auth/callback",
-  "https://associated-consoles-roof-all.trycloudflare.com/auth/shopify/callback",
-  "https://associated-consoles-roof-all.trycloudflare.com/api/auth/callback",
-  "https://associated-consoles-roof-all.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://voices-thesis-refuse-centered.trycloudflare.com/auth/callback",
+  "https://voices-thesis-refuse-centered.trycloudflare.com/auth/shopify/callback",
+  "https://voices-thesis-refuse-centered.trycloudflare.com/api/auth/callback",
+  "https://voices-thesis-refuse-centered.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
