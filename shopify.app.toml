@@ -1,20 +1,24 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-name = "manejo-inventario-ashley"
 client_id = "04664990a1d1d52fbdc089346929012a"
-application_url = "https://voices-thesis-refuse-centered.trycloudflare.com"
+name = "manejo-inventario-ashley"
+handle = "manejo-inventario-ashley"
+application_url = "https://paintings-opera-cycles-replica.trycloudflare.com"
 embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "issaworkshop.myshopify.com"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,read_inventory,write_inventory"
+scopes = "read_inventory,write_inventory,write_products"
 
 [auth]
 redirect_urls = [
-  "https://voices-thesis-refuse-centered.trycloudflare.com/auth/callback",
-  "https://voices-thesis-refuse-centered.trycloudflare.com/auth/shopify/callback",
-  "https://voices-thesis-refuse-centered.trycloudflare.com/api/auth/callback",
-  "https://voices-thesis-refuse-centered.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://paintings-opera-cycles-replica.trycloudflare.com/auth/callback",
+  "https://paintings-opera-cycles-replica.trycloudflare.com/auth/shopify/callback",
+  "https://paintings-opera-cycles-replica.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -22,7 +26,3 @@ api_version = "2024-01"
 
 [pos]
 embedded = false
-
-[build]
-automatically_update_urls_on_dev = true
-dev_store_url = "issaworkshop.myshopify.com"
