@@ -30,7 +30,7 @@ export async function parseCSVFromFile(filePath: string): Promise<void> {
     );
 
     let batch: InvData[] = [];
-
+    console.log("filepath",filePath,parser)
   for await (const record of parser) {
     const dataRow: InvData = {
       variantId: record[0].toString(),
