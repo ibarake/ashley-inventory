@@ -1,4 +1,4 @@
-import { ActionFunction, redirect } from "@remix-run/node";
+import { type ActionFunction, redirect } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import {
   fileUploadMutation,
@@ -7,7 +7,7 @@ import {
   bulkOperationRunMutation
 } from "../utils/queries";
 import db from "../db.server";
-import { statusData } from "@prisma/client";
+import type { statusData } from "@prisma/client";
 import * as fs from 'fs';
 import uploadFile from "../utils/upload-files";
 import parseXML from "~/utils/parse-xml";

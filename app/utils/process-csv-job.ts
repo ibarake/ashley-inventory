@@ -1,5 +1,4 @@
-import db from '../db.server';
-import { Job } from 'bull';
+import type { Job } from 'bull';
 import { parseCSVFromFileStatus } from './parse-csv-status';
 import { parseCSVFromFile } from './parse-csv';
 

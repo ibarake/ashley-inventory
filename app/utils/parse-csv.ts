@@ -1,6 +1,6 @@
 import { parse } from "csv-parse";
 import fs from "fs";
-import { InvData } from "@prisma/client";
+import type { InvData } from "@prisma/client";
 import db from "../db.server";
 
 const BATCH_SIZE = 500; // Adjust this based on your needs

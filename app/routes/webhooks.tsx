@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 import getMutationType from "../utils/get-query";
-import { statusData } from "@prisma/client";
+import type { statusData } from "@prisma/client";
 import * as fs from 'fs';
 import uploadFile from "../utils/upload-files";
 import parseXML from "~/utils/parse-xml";
@@ -19,7 +19,7 @@ var path = require('path');
 type PartialStatusData = Pick<statusData, 'variantId' | 'price'>;
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { topic, shop, session, admin, payload } = await authenticate.webhook(
+  const { topic, shop, session, admin } = await authenticate.webhook(
     request
   );
 
@@ -39,7 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const bulkOperationQueryStatus = await admin.graphql(bulkMutationQuery);
       const bulkOperationQueryStatusResponse = await bulkOperationQueryStatus.json();
       const mutationType = getMutationType(bulkOperationQueryStatusResponse.data.currentBulkOperation);
-      console.log(bulkOperationQueryStatusResponse);
+      console.log(JSON.stringify(bulkOperationQueryStatusResponse));
       console.log("mutation type: ", mutationType);
 
       if (mutationType === "productUpdate") {

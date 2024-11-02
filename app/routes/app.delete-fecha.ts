@@ -4,7 +4,7 @@ import db from "../db.server";
 
 export const action: ActionFunction = async ({ request }) => {
     console.log('Deleting all inv data');
-    const deleteInv = await db.invData.deleteMany({});
+    await db.invData.deleteMany({});
     console.log('Deleted all inv data');
 
     return redirect("/app/status-import");

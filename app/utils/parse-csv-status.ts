@@ -1,6 +1,6 @@
 import { parse } from "csv-parse";
 import fs from "fs";
-import { statusData } from "@prisma/client";
+import type { statusData } from "@prisma/client";
 import db from "../db.server";
 
 const BATCH_SIZE = 500; // Adjust this based on your needs
@@ -27,7 +27,7 @@ const processBatch = async (batch: statusData[]) => {
 };
 
 export async function parseCSVFromFileStatus(filePath: string): Promise<void> {
-  return new Promise(async (resolve) => {
+  return new Promise(async (_resolve) => {
     const parser = fs.createReadStream(filePath).pipe(
       parse({
         delimiter: ",",

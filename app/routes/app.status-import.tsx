@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Form,
   Link,
-  useFetcher,
   useLoaderData,
   useSearchParams,
   useSubmit,
@@ -16,7 +15,7 @@ import {
   InlineStack,
   Button,
   DataTable,
-  ColumnContentType,
+  type ColumnContentType,
   LegacyCard,
   Spinner
 } from "@shopify/polaris";
@@ -24,7 +23,7 @@ import { authenticate } from "../shopify.server";
 import db from "../db.server";
 import { useState } from "react";
 import { bulkMutationQuery } from "~/utils/queries";
-import { statusData } from "@prisma/client";
+import type { statusData } from "@prisma/client";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
@@ -56,7 +55,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { batchData, total, bulkOperationStatus };
 };
 
-export default function statusImport() {
+export default function StatusImport() {
   const [queryParams] = useSearchParams();
   const currentPage = Number(queryParams.get("page") || 1); // Add currentPage state
   const loaderData = useLoaderData<typeof loader>();
@@ -96,7 +95,7 @@ export default function statusImport() {
     "text",
     "numeric"
   ];
-  const headers = ["Product ID", "Variant ID", "Variant SKU", "Title", "Color", "status", "price"];
+  const headers = ["Product ID", "Variant ID", "Title", "Color", "Variant SKU", "status", "price"];
 
   const rows = data.map((element: statusData) => [
     element.id,
